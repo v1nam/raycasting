@@ -1,14 +1,13 @@
 import pygame
 import json
 
-pygame.init()
-pygame.font.init()
-screen = pygame.display.set_mode((700, 450))
-
 gmap = []
 with open(input("path of map file to load: "), "r") as m:
     gmap = json.load(m)
 
+pygame.init()
+pygame.font.init()
+screen = pygame.display.set_mode((700, 450))
 running = True
 w, h = screen.get_size()
 
@@ -146,16 +145,16 @@ class Player:
                 self.pos.y * MINIMAP_SCALE_FACTOR,
                 self.pos.x * MINIMAP_SCALE_FACTOR,
             )
-            # pygame.draw.line(
-            #     raysurf,
-            #     (*GREEN, 150),
-            #     minimap_player_pos,
-            #     minimap_player_pos
-            #     + pygame.Vector2(
-            #         ray_dir.y * ray_dist * MINIMAP_SCALE_FACTOR,
-            #         ray_dir.x * ray_dist * MINIMAP_SCALE_FACTOR,
-            #     ),
-            # )
+            pygame.draw.line(
+                raysurf,
+                (*GREEN, 150),
+                minimap_player_pos,
+                minimap_player_pos
+                + pygame.Vector2(
+                    ray_dir.y * ray_dist * MINIMAP_SCALE_FACTOR,
+                    ray_dir.x * ray_dist * MINIMAP_SCALE_FACTOR,
+                ),
+            )
 
 
 player = Player(gmap)
