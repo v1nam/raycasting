@@ -37,11 +37,14 @@ SKY_BLUE = (129, 161, 193)
 BLACK = (46, 52, 64)
 ORANGE = (208, 135, 112)
 
+
 class Player:
     def __init__(self, gmap):
         self.pos = pygame.Vector2(2, 2)
-        self.dir = pygame.Vector2(1, 0) # direction relative to player position
-        self.camera_plane = pygame.Vector2(0, -0.66) # camera plane perpendicular to direction
+        self.dir = pygame.Vector2(1, 0)  # direction relative to player position
+        self.camera_plane = pygame.Vector2(
+            0, -0.66
+        )  # camera plane perpendicular to direction
         self.gmap = gmap
 
         self.colarr = {
@@ -60,8 +63,8 @@ class Player:
             5: DARK_YELLOW,
         }
 
-        self.MOVE_SPEED = 4 # blocks per sec
-        self.ROT_SPEED = 3 # radians per sec
+        self.MOVE_SPEED = 4  # blocks per sec
+        self.ROT_SPEED = 3  # radians per sec
 
     def handle_input(self, fp):
         speed = fp * self.MOVE_SPEED
@@ -69,7 +72,9 @@ class Player:
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_w] or keys[pygame.K_UP]:
-            if not self.gmap[int(self.pos.x + self.dir.x * speed)][int(self.pos.y)]: # check for wall collision
+            if not self.gmap[int(self.pos.x + self.dir.x * speed)][
+                int(self.pos.y)
+            ]:  # check for wall collision
                 self.pos.x += self.dir.x * speed
             if not self.gmap[int(self.pos.x)][int(self.pos.y + self.dir.y * speed)]:
                 self.pos.y += self.dir.y * speed
@@ -85,12 +90,13 @@ class Player:
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
             self.dir = self.dir.rotate_rad(-rot_sp)
             self.camera_plane = self.camera_plane.rotate_rad(-rot_sp)
-    
+
     def raycast(self, w, h, screen):
         for x in range(0, w, 3):
-            cx = 2 * x / w - 1 # map x-w to 0-1
+            cx = 2 * x / w - 1  # map x-w to 0-1
             ray_dir = pygame.Vector2(
-                self.dir.x + self.camera_plane.x * cx, self.dir.y + self.camera_plane.y * cx
+                self.dir.x + self.camera_plane.x * cx,
+                self.dir.y + self.camera_plane.y * cx,
             )
             map_pos = pygame.Vector2(int(self.pos.x), int(self.pos.y))
             delx = abs(1 / ray_dir.x) if ray_dir.x != 0 else 1e30
@@ -131,7 +137,9 @@ class Player:
             lower_wall = int(h / 2 + line_height / 2)
             upper_wall = max(0, upper_wall)
             lower_wall = min(h - 1, lower_wall)
-            col = (self.colarr if not side_dir else self.shadearr).get(self.gmap[int(map_pos.x)][int(map_pos.y)])
+            col = (self.colarr if not side_dir else self.shadearr).get(
+                self.gmap[int(map_pos.x)][int(map_pos.y)]
+            )
             pygame.draw.line(screen, DARK_GRAY, (x, lower_wall), (x, h), 3)
             pygame.draw.line(screen, col, (x, upper_wall), (x, lower_wall), 3)
             minimap_player_pos = (
@@ -148,6 +156,7 @@ class Player:
             #         ray_dir.x * ray_dist * MINIMAP_SCALE_FACTOR,
             #     ),
             # )
+
 
 player = Player(gmap)
 minimap = pygame.Surface(MINIMAP_SIZE)
@@ -177,7 +186,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
             break
-    
+
     player.handle_input(fp)
 
     fpstext = myfont.render(str(int(clock.get_fps())), False, BLACK)

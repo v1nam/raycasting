@@ -6,11 +6,11 @@ gmap = []
 path = ""
 map_dims = []
 
-if input("new file? (y/n): ").lower() == 'y':
+if input("new file? (y/n): ").lower() == "y":
     path = input("path to save file to: ")
     map_dims = [int(input("enter map width: ")), int(input("enter map height: "))]
     gmap = [[0 for x in range(map_dims[0])] for y in range(map_dims[1])]
-elif (path := input("path to load existing file: ")):
+elif path := input("path to load existing file: "):
     with open(path, "r") as f:
         gmap = json.load(f)
         map_dims = [len(gmap[0]), len(gmap)]
@@ -43,9 +43,16 @@ gridsurf.fill((46, 52, 64))
 rw, rh = w / map_dims[0], h / map_dims[1]
 for x in range(map_dims[0]):
     for y in range(map_dims[1]):
-        pygame.draw.rect(gridsurf, (59, 66, 82), (x * rw, y * rh, math.ceil(rw), math.ceil(rh)), 1)
-        if (mapval := gmap[y][x]):
-            pygame.draw.rect(gridsurf, colarr[mapval], (x * rw + 1, y * rh + 1, math.ceil(rw) - 2, math.ceil(rh) - 2))
+        pygame.draw.rect(
+            gridsurf, (59, 66, 82), (x * rw, y * rh, math.ceil(rw), math.ceil(rh)), 1
+        )
+        if mapval := gmap[y][x]:
+            pygame.draw.rect(
+                gridsurf,
+                colarr[mapval],
+                (x * rw + 1, y * rh + 1, math.ceil(rw) - 2, math.ceil(rh) - 2),
+            )
+
 
 def change_map(mx, my, val, col):
     try:
@@ -53,7 +60,10 @@ def change_map(mx, my, val, col):
     except IndexError:
         print(int(my / rh), int(my / rw))
         exit()
-    pygame.draw.rect(gridsurf, col, ((mx // rw) * rw + 1, (my // rh) * rh + 1, rw - 2, rh - 2))
+    pygame.draw.rect(
+        gridsurf, col, ((mx // rw) * rw + 1, (my // rh) * rh + 1, rw - 2, rh - 2)
+    )
+
 
 current_col = 2
 
@@ -61,7 +71,11 @@ while r:
     screen.fill((46, 52, 64))
     screen.blit(gridsurf, (0, 0))
     mx, my = pygame.mouse.get_pos()
-    pygame.draw.rect(screen, (76, 86, 106), ((mx // rw) * rw + 1, (my // rh) * rh + 1, rw - 2, rh - 2))
+    pygame.draw.rect(
+        screen,
+        (76, 86, 106),
+        ((mx // rw) * rw + 1, (my // rh) * rh + 1, rw - 2, rh - 2),
+    )
     if mx <= w and mx >= 0 and my <= h and my >= 0:
         if pygame.mouse.get_pressed()[0]:
             change_map(mx, my, current_col, colarr[current_col])
